@@ -8,14 +8,19 @@ export default function AddProduct() {
   // /react-form/api
   // or use server actions
 
+  // server actions are executed on server
+  // they can be called from both server and client components
+
+  // A Server Action can be defined with the React "use server" directive.
+  // You can place the directive at the top of an async function to mark the function as a Server Action,
+  // or at the top of a separate file to mark all exports of that file as Server Actions.
+
   const createProduct = async (formData: FormData) => {
     'use server';
-    console.log(formData);
+    // console.log(formData);
     const title = formData.get('title') as string;
     const price = formData.get('price') as string;
     const description = formData.get('description') as string;
-
-    
 
     await addProduct(title, parseFloat(price), description);
     redirect('/products');

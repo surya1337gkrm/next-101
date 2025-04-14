@@ -28,9 +28,9 @@ const seedData = async () => {
 seedData();
 
 export async function getProducts() {
-  await new Promise((resolve) => {
-    setTimeout(resolve, 3000);
-  });
+    await new Promise((resolve) => {
+      setTimeout(resolve, 3000);
+    });
   const products = await prisma.product.findMany();
   return products;
 }
@@ -52,8 +52,14 @@ export async function addProduct(
   price: number,
   description: string | null
 ) {
-  console.log(price);
+  //   console.log(price);
   return await prisma.product.create({
     data: { title, price, description },
+  });
+}
+
+export async function deleteProduct(id: number) {
+  await prisma.product.delete({
+    where: { id },
   });
 }

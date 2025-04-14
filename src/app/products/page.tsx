@@ -1,4 +1,5 @@
-import { getProducts } from '@/prisma-db';
+import { getProducts, deleteProduct } from '@/prisma-db';
+import { revalidatePath } from 'next/cache';
 
 type Product = {
   id: number;
@@ -6,6 +7,15 @@ type Product = {
   price: number;
   description: string | null;
 };
+
+const deleteItem = async (productId: number) => {
+  'use server';
+  await deleteProduct(productId);
+  //   console.log('Product deleted successfully');
+  //   window.location.reload();
+  revalidatePath('/products');
+};
+
 export default async function ProductsPage() {
   const products: Product[] = await getProducts();
   //   console.log(products);
@@ -23,6 +33,13 @@ export default async function ProductsPage() {
             <p className='text-xs text-gray-400'>
               {product.description ?? 'No description available'}
             </p>
+            <form action={deleteItem.bind(null, product.id)}>
+              <button
+                type='submit'
+                className='float-right bg-red-600 text-foreground p-2 mt-2 cursor-pointer rounded shadow-lg text-xs'>
+                Delete
+              </button>
+            </form>
           </div>
         ))}
       </div>
